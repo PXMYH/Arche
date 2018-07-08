@@ -91,6 +91,19 @@ SELECT id, age, first_name, last_name, email FROM users LIMIT $1;`
 		panic(err)
 	}
 	defer rows.Close()
+
+	columnNames, err := rows.Columns()
+	fmt.Println("names of columns are: ", columnNames)
+	if err != nil {
+		panic(err)
+	}
+
+	columnTypes, err := rows.ColumnTypes()
+	fmt.Println("types of columns are: ", columnTypes)
+	if err != nil {
+		panic(err)
+	}
+
 	for rows.Next() {
 		err = rows.Scan(&user_record.ID, &user_record.Age, &user_record.FirstName, &user_record.LastName, &user_record.Email)
 		if err != nil {
