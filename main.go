@@ -62,6 +62,7 @@ WHERE id = $1;`
 
 	// querying database record
 	type User struct {
+		ID        int
 		Age       int
 		FirstName string
 		LastName  string
@@ -80,6 +81,25 @@ SELECT age, first_name, last_name, email FROM users where id = $1;`
 	case sql.ErrNoRows:
 		fmt.Println("No rows returned, redirecting to 404 now")
 	default:
+		panic(err)
+	}
+
+	sqlStatement = `
+SELECT id, age, first_name, last_name, email FROM users LIMIT $1;`
+	rows, err := db.Query(sqlStatement, 12)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&user_record.ID, &user_record.Age, &user_record.FirstName, &user_record.LastName, &user_record.Email)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println("user record => ", user_record)
+	}
+	err = rows.Err()
+	if err != nil {
 		panic(err)
 	}
 }
