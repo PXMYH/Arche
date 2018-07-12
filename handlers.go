@@ -60,11 +60,12 @@ func createHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("driver = ", driver)
 
 	// save to database
+	// NOTE: have to use positional variable $1 $2 etc. like in godoc, placeholder ? doesn't work in this case
+	// reference: https://stackoverflow.com/questions/21073650/golang-pq-syntax-error-when-executing-sql
 	prepStatement := `
 INSERT INTO drivers(id, firstname, lastname, age, team, entries, win, championship)
 VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 		`
-	// prepStatement := "INSERT INTO drivers(id, age) VALUES($1, $2);"
 	sqlStatement, err := driverDB.Prepare(prepStatement)
 	if err != nil {
 		fmt.Printf("Prepare query error, preped statement = %v, sqlStatement = %v\n", prepStatement, sqlStatement)
@@ -72,7 +73,6 @@ VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 	}
 
 	_, err = sqlStatement.Exec(driver.id, driver.firstName, driver.lastName, driver.age, driver.team, driver.entries, driver.win, driver.championship)
-	// _, err = sqlStatement.Exec(driver.id, driver.age)
 	if err != nil {
 		fmt.Println("Execute query error")
 		panic(err)
