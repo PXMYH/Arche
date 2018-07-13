@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	rice "github.com/GeertJohan/go.rice"
+	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
 
@@ -54,5 +56,11 @@ func main() {
 	http.HandleFunc("/create", createHandler)
 	http.HandleFunc("/update", updateHandler)
 	http.HandleFunc("/delete", deleteHandler)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+
+	router := mux.NewRouter()
+	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("website").HTTPBox()))
+	log.Fatal(http.ListenAndServe(":"+port, router))
+
+	// log.Fatal(http.ListenAndServe(":12345", router))
+
 }
