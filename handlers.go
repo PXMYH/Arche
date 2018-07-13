@@ -80,6 +80,7 @@ VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 		panic(err)
 	}
 	http.Redirect(w, r, "/", 301)
+	fmt.Println("Record CREATED")
 }
 
 // UPDATE handler
@@ -132,5 +133,32 @@ WHERE id = $1
 	checkServerError(err, w)
 
 	http.Redirect(w, r, "/", 301)
-	fmt.Println("Record updated")
+	fmt.Println("Record UPDATED")
+}
+
+// delete handler
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "DELETE" {
+		http.Redirect(w, r, "/", 301)
+	}
+
+	var driver Drivers
+
+	driver.id, _ = strconv.Atoi(r.FormValue("id"))
+
+	prepStatement := `DELETE FROM drivers WHERE id = $1`
+	sqlStatement, err := driverDB.Prepare(prepStatement)
+	if err != nil {
+		fmt.Printf("Prepare query error, preped statement = %v, sqlStatement = %v\n", prepStatement, sqlStatement)
+		panic(err)
+	}
+
+	result, err := sqlStatement.Exec(driver.id)
+	checkServerError(err, w)
+
+	_, err = result.RowsAffected()
+	checkServerError(err, w)
+
+	http.Redirect(w, r, "/", 301)
+	fmt.Println("Record DELETED")
 }
