@@ -52,19 +52,8 @@ func main() {
 	// register handlers
 	http.HandleFunc("/list", readHandler)
 	http.HandleFunc("/create", createHandler)
+	http.HandleFunc("/update", updateHandler)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-
-	// retrieving database record
-	// 	sqlStatement := `
-	// INSERT INTO users (age, first_name, last_name, email)
-	// VALUES ($1, $2, $3, $4)
-	// RETURNING id`
-	// id := 0
-	// 	err = db.QueryRow(sqlStatement, 24, "Mike", "Hu", "mickal.hu@top.com").Scan(&id)
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	// 	fmt.Println("New record inserted: ", id)
 
 	// updating database record
 	// 	sqlStatement := `
