@@ -60,7 +60,4 @@ func main() {
 	router := mux.NewRouter()
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("website").HTTPBox()))
 	log.Fatal(http.ListenAndServe(":"+port, router))
-
-	// log.Fatal(http.ListenAndServe(":12345", router))
-
 }
