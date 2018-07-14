@@ -1,5 +1,7 @@
 package main
 
+// drivers type
+// information about each drivers, currently focused on F1 drivers
 type Drivers struct {
 	id           int
 	firstName    string
