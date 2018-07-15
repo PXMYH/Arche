@@ -23,6 +23,18 @@ const (
 var driverDB *sql.DB
 var err error
 
+// create the table
+// CREATE TABLE drivers (
+//   id SERIAL PRIMARY KEY,
+//   firstName TEXT,
+//   lastName TEXT,
+//   age INT,
+//   team TEXT,
+//   entries INT,
+//   win INT,
+//   championship INT,
+// );
+
 func main() {
 	fmt.Println("Starting Database")
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
